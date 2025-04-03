@@ -9,7 +9,7 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
-public class util {
+public class Util {
     private Fornecedor[] fornecedor = new Fornecedor[5];
     private Produto[] produtos = new Produto[7];
     private int idxFornecedor = 0;
@@ -34,7 +34,7 @@ public class util {
                     pesquisarProduto();
                     break;
                 case 3:
-                    pesquisarFornecedor();
+                    pesquisar();
                     break;
                 default:
                     showMessageDialog(null,"Valor invalido");
@@ -48,11 +48,24 @@ public class util {
         double valor;
         Fornecedor fornecedor = pesquisarFornecedor();
         if (fornecedor==null)
-            cadastrarFornecedor();
+            fornecedor = cadastrarFornecedor();
 
+        nome = showInputDialog("Nome do produto");
+        qtdEstoque=parseInt(showInputDialog("Quantos em estoque"));
+        valor= parseDouble(showInputDialog("Valor unitario:"));
+        produtos[idxProduto]=new Produto(nome,valor,qtdEstoque,fornecedor);
     };
 
-    public void pesquisarProduto(){}
+    public void pesquisarProduto(){
+        String aux="";
+        String nometeste = showInputDialog("QAUL O NOME DO PRODUTO: ");
+        for (int i = 0; i < idxFornecedor; i++) {
+            if (nometeste.equalsIgnoreCase(produtos[i].getNome()));
+            aux = ("Nome: " + produtos[i].getNome() + "\nvalor: " + produtos[i].getValor()+"\nFornecedor: " + produtos[i].getFornecedor());
+        }
+        showMessageDialog(null , aux);
+
+    }
 
     public Fornecedor pesquisarFornecedor(){
         long cnpj= parseLong(showInputDialog("CNPJ DO FORNECEDOR:"));
@@ -63,9 +76,17 @@ public class util {
         showMessageDialog(null,"CNPJ NAO ENCONTRADO");
         return null;
     }
-    public void cadastrarFornecedor(){
+    public Fornecedor cadastrarFornecedor(){
         long cnpj = parseLong(showInputDialog(null,"Digite seu cnpj"));
         String nome = showInputDialog(null, "Digite seu nome");
-        fornecedor[idxFornecedor] = new Fornecedor(nome, cnpj); 
+        fornecedor[idxFornecedor] = new Fornecedor(nome, cnpj);
+        idxFornecedor++;
+        return fornecedor[idxFornecedor-1];
+    }
+    public void pesquisar(){
+        Fornecedor fornecedor = pesquisarFornecedor();
+        if (fornecedor!=null){
+            showMessageDialog(null, fornecedor.getCnpj()+ "\n" + fornecedor.getNome());
+        }
     }
 }
